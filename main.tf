@@ -11,11 +11,11 @@ provider "aws" {
 # ---------------------------------------------------------------------------------------------------------------------
 resource "aws_iam_role" "scheduled_task_cw_event_role" {
   name               = "${var.name_preffix}-st-cw-role"
-  assume_role_policy = "${file("${path.module}/files/iam/scheduled_task_cw_event_role_assume_role_policy.json")}"
+  assume_role_policy = file("${path.module}/files/iam/scheduled_task_cw_event_role_assume_role_policy.json")
 }
 
 data "template_file" "scheduled_task_cw_event_role_cloudwatch_policy" {
-  template = "${file("${path.module}/files/iam/scheduled_task_cw_event_role_cloudwatch_policy.json")}"
+  template = file("${path.module}/files/iam/scheduled_task_cw_event_role_cloudwatch_policy.json")
   vars     = {
     TASK_EXECUTION_ROLE_ARN = var.ecs_execution_task_role_arn
   }
@@ -23,8 +23,8 @@ data "template_file" "scheduled_task_cw_event_role_cloudwatch_policy" {
 
 resource "aws_iam_role_policy" "scheduled_task_cw_event_role_cloudwatch_policy" {
   name   = "${var.name_preffix}-st-cw-policy"
-  role   = "${aws_iam_role.scheduled_task_cw_event_role.id}"
-  policy = "${data.template_file.scheduled_task_cw_event_role_cloudwatch_policy.rendered}"
+  role   = aws_iam_role.scheduled_task_cw_event_role.id
+  policy = data.template_file.scheduled_task_cw_event_role_cloudwatch_policy.rendered
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
