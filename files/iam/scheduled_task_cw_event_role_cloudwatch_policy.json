@@ -15,7 +15,12 @@
       "Action": "iam:PassRole",
       "Resource": [
         "${TASK_EXECUTION_ROLE_ARN}"
-      ]
+      ],
+      "Condition": {
+          "StringLike": {
+              "iam:PassedToService": "ecs-tasks.amazonaws.com"
+          }
+      }
     }
   ]
 }
